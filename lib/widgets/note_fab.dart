@@ -16,13 +16,13 @@ class NoteFab extends StatelessWidget {
       ),
       child: FloatingActionButton.large(
         onPressed: onPressed,
-        child: FaIcon(FontAwesomeIcons.plus),
         backgroundColor: primary,
         foregroundColor: white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: black),
         ),
+        child: FaIcon(FontAwesomeIcons.plus),
       ),
     );
   }

@@ -36,6 +36,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -80,6 +81,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                 hintStyle: TextStyle(color: gray300),
                 border: InputBorder.none,
               ),
+              canRequestFocus: !readOnly,
             ),
             if (!widget.isNewNote) ...[
               Row(
@@ -98,7 +100,6 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                     flex: 5,
                     child: Text(
                       '07 Decemeber 2023, 03:35 PM',
-
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: gray900,
@@ -123,7 +124,6 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                     flex: 5,
                     child: Text(
                       '06 Decemeber 2023, 03:35 PM',
-
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: gray900,
@@ -166,8 +166,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                 ),
               ],
             ),
-
-            const Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Divider(color: gray700, thickness: 2),
             ),

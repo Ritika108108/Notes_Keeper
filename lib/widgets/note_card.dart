@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/pages/new_or_edit_note_page.dart';
 
 class NoteCard extends StatelessWidget {
-  const NoteCard({required this.isInGrid, super.key});
+  const NoteCard({required this.note, this.isInGrid, super.key});
 
+  final Note note;
+  // ignore: prefer_typing_uninitialized_variables, strict_top_level_inference
   final isInGrid;
 
   @override
@@ -25,6 +28,7 @@ class NoteCard extends StatelessWidget {
           border: Border.all(color: primary, width: 2),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
+            // ignore: deprecated_member_use
             BoxShadow(color: primary.withOpacity(0.5), offset: Offset(4, 4)),
           ],
         ),
