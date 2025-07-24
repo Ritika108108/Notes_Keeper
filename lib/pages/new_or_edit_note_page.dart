@@ -81,7 +81,10 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
           ),
           NoteIconButtonOutlined(
             icon: FontAwesomeIcons.check,
-            onPressed: () {},
+            onPressed: () {
+              newNoteController.saveNote(context);
+              Navigator.pop(context);
+            },
           ),
         ],
       ),
@@ -199,7 +202,12 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                             child: Row(
                               children: List.generate(
                                 tags.length,
-                                (index) => NoteTag(label: tags[index]),
+                                (index) => NoteTag(
+                                  label: tags[index],
+                                  onClosed: () {
+                                    newNoteController.removeTag(index);
+                                  },
+                                ),
                               ),
                             ),
                           ),

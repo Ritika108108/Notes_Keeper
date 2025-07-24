@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:notes_keeper/core/constants.dart';
 
 class NoteTag extends StatelessWidget {
-  const NoteTag({required this.label, super.key});
+  const NoteTag({required this.label, this.onClosed, super.key});
 
   final String label;
+  final VoidCallback? onClosed;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,15 @@ class NoteTag extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       margin: EdgeInsets.only(right: 4),
-      child: Text(label, style: TextStyle(fontSize: 12, color: gray700)),
+      child: Row(
+        children: [
+          Text(label, style: TextStyle(fontSize: 12, color: gray700)),
+          if (onClosed != null) ...[
+            SizedBox(width: 4),
+            GestureDetector(onTap: onClosed, child: Icon(Icons.close)),
+          ],
+        ],
+      ),
     );
   }
 }
