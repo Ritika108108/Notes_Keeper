@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/widgets/new_tag_dialog.dart';
+
+class DialogCard extends StatelessWidget {
+  const DialogCard({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          width: MediaQuery.sizeOf(context).width * 0.75,
+          padding: const EdgeInsets.all(24.0),
+          decoration: BoxDecoration(
+            color: white,
+            border: Border.all(width: 2, color: black),
+            boxShadow: [BoxShadow(offset: Offset(4, 4))],
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}

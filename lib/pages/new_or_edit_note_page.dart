@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/widgets/dialog_card.dart';
+import 'package:notes_keeper/widgets/new_tag_dialog.dart';
+import 'package:notes_keeper/widgets/note_card.dart';
 import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
 
@@ -16,12 +21,20 @@ class NewOrEditNotePage extends StatefulWidget {
 class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
   late final FocusNode focusNode;
 
+  late final NewNoteController newNoteController;
+  late final QuillController quillController;
+
   late bool readOnly;
 
   @override
   void initState() {
     super.initState();
     focusNode = FocusNode();
+    newNoteController = NewNoteController();
+    quillController = QuillController.basic()
+      ..addListener(() {
+        newNoteController.content = quillController.document;
+      });
     if (widget.isNewNote) {
       focusNode.requestFocus();
       readOnly = false;
@@ -32,6 +45,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
 
   @override
   void dispose() {
+    quillController.dispose();
     focusNode.dispose();
     super.dispose();
   }
@@ -82,6 +96,9 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                 border: InputBorder.none,
               ),
               canRequestFocus: !readOnly,
+              onChanged: (newValue) {
+                newNoteController.title = newValue;
+              },
             ),
             if (!widget.isNewNote) ...[
               Row(
@@ -149,7 +166,13 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                       SizedBox(width: 8),
                       NoteIconButton(
                         icon: FontAwesomeIcons.circlePlus,
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                DialogCard(child: NewTagDialog()),
+                          );
+                        },
                       ),
                     ],
                   ),
