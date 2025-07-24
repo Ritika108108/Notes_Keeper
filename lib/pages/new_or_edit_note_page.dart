@@ -107,14 +107,13 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                     ? FontAwesomeIcons.pen
                     : FontAwesomeIcons.bookOpen,
                 onPressed: () {
-                  setState(() {
-                    readOnly = !readOnly;
-                    if (readOnly) {
-                      FocusScope.of(context).unfocus();
-                    } else {
-                      focusNode.requestFocus();
-                    }
-                  });
+                  final controller = context.read<NewNoteController>();
+                  controller.readOnly = !controller.readOnly;
+                  if (controller.readOnly) {
+                    FocusScope.of(context).unfocus();
+                  } else {
+                    focusNode.requestFocus();
+                  }
                 },
               ),
             ),
