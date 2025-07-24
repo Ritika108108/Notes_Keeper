@@ -122,10 +122,12 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
               selector: (_, newNoteController) => newNoteController.canSaveNote,
               builder: (_, canSaveNote, __) => NoteIconButtonOutlined(
                 icon: FontAwesomeIcons.check,
-                onPressed: () {
-                  newNoteController.saveNote(context);
-                  Navigator.pop(context);
-                },
+                onPressed: canSaveNote
+                    ? () {
+                        newNoteController.saveNote(context);
+                        Navigator.pop(context);
+                      }
+                    : null,
               ),
             ),
           ],
