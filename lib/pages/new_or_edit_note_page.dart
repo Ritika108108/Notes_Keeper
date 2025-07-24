@@ -35,7 +35,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
     super.initState();
     focusNode = FocusNode();
     newNoteController = context.read<NewNoteController>();
-    titleController = TextEditingController();
+    titleController = TextEditingController(text: newNoteController.title);
     quillController = QuillController.basic()
       ..addListener(() {
         newNoteController.content = quillController.document;
@@ -98,25 +98,35 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
           ),
           title: Text(widget.isNewNote ? 'New Note' : 'Edit Note'),
           actions: [
-            NoteIconButtonOutlined(
-              icon: readOnly ? FontAwesomeIcons.pen : FontAwesomeIcons.bookOpen,
-              onPressed: () {
-                setState(() {
-                  readOnly = !readOnly;
-                  if (readOnly) {
-                    FocusScope.of(context).unfocus();
-                  } else {
-                    focusNode.requestFocus();
-                  }
-                });
-              },
+            Selector<NewNoteController, bool>(
+              selector: (context, newNoteController) =>
+                  newNoteController.readOnly,
+
+              builder: (context, readOnly, child) => NoteIconButtonOutlined(
+                icon: readOnly
+                    ? FontAwesomeIcons.pen
+                    : FontAwesomeIcons.bookOpen,
+                onPressed: () {
+                  setState(() {
+                    readOnly = !readOnly;
+                    if (readOnly) {
+                      FocusScope.of(context).unfocus();
+                    } else {
+                      focusNode.requestFocus();
+                    }
+                  });
+                },
+              ),
             ),
-            NoteIconButtonOutlined(
-              icon: FontAwesomeIcons.check,
-              onPressed: () {
-                newNoteController.saveNote(context);
-                Navigator.pop(context);
-              },
+            Selector<NewNoteController, bool>(
+              selector: (_, newNoteController) => newNoteController.canSaveNote,
+              builder: (_, canSaveNote, __) => NoteIconButtonOutlined(
+                icon: FontAwesomeIcons.check,
+                onPressed: () {
+                  newNoteController.saveNote(context);
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ],
         ),
@@ -124,18 +134,21 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              TextField(
-                controller: titleController,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  hintText: 'Title Here',
-                  hintStyle: TextStyle(color: gray300),
-                  border: InputBorder.none,
+              Selector<NewNoteController, bool>(
+                selector: (context, controller) => controller.readOnly,
+                builder: (context, readOnly, child) => TextField(
+                  controller: titleController,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                    hintText: 'Title Here',
+                    hintStyle: TextStyle(color: gray300),
+                    border: InputBorder.none,
+                  ),
+                  canRequestFocus: !readOnly,
+                  onChanged: (newValue) {
+                    newNoteController.title = newValue;
+                  },
                 ),
-                canRequestFocus: !readOnly,
-                onChanged: (newValue) {
-                  newNoteController.title = newValue;
-                },
               ),
               NoteMetadata(note: newNoteController.note),
               Padding(
