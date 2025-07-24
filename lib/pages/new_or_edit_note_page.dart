@@ -5,9 +5,10 @@ import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/widgets/dialog_card.dart';
 import 'package:notes_keeper/widgets/new_tag_dialog.dart';
-import 'package:notes_keeper/widgets/note_card.dart';
 import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
+import 'package:notes_keeper/widgets/note_tag.dart';
+import 'package:provider/provider.dart';
 
 class NewOrEditNotePage extends StatefulWidget {
   const NewOrEditNotePage({required this.isNewNote, super.key});
@@ -166,12 +167,16 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                       SizedBox(width: 8),
                       NoteIconButton(
                         icon: FontAwesomeIcons.circlePlus,
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          final String? tag = await showDialog<String?>(
                             context: context,
                             builder: (context) =>
                                 DialogCard(child: NewTagDialog()),
                           );
+
+                          if (tag != null) {
+                            newNoteController.addTag(tag);
+                          }
                         },
                       ),
                     ],
@@ -179,12 +184,25 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                 ),
                 Expanded(
                   flex: 5,
-                  child: Text(
-                    'No tags added',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: gray900,
-                    ),
+                  child: Selector<NewNoteController, List<String>>(
+                    selector: (_, newNoteController) => newNoteController.tags,
+                    builder: (_, tags, __) => tags.isEmpty
+                        ? Text(
+                            'No tags added',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: gray900,
+                            ),
+                          )
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: List.generate(
+                                tags.length,
+                                (index) => NoteTag(label: tags[index]),
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -196,7 +214,10 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
             TextField(
               focusNode: focusNode,
               readOnly: readOnly,
-              decoration: InputDecoration(hintText: 'Note here...'),
+              decoration: InputDecoration(
+                hintText: 'Note here...',
+                border: InputBorder.none,
+              ),
             ),
           ],
         ),

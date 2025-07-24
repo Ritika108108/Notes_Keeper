@@ -27,5 +27,5 @@ class NewNoteController extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> get tags => _tags;
+  List<String> get tags => [..._tags];
 }

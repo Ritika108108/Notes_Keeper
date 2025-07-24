@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/pages/new_or_edit_note_page.dart';
+import 'package:notes_keeper/widgets/note_tag.dart';
 
 class NoteCard extends StatelessWidget {
   const NoteCard({required this.note, this.isInGrid, super.key});
@@ -28,7 +29,6 @@ class NoteCard extends StatelessWidget {
           border: Border.all(color: primary, width: 2),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
-            // ignore: deprecated_member_use
             BoxShadow(color: primary.withOpacity(0.5), offset: Offset(4, 4)),
           ],
         ),
@@ -52,18 +52,7 @@ class NoteCard extends StatelessWidget {
               child: Row(
                 children: List.generate(
                   3,
-                  (index) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: gray100,
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                    margin: EdgeInsets.only(right: 4),
-                    child: Text(
-                      'First chip',
-                      style: TextStyle(fontSize: 12, color: gray700),
-                    ),
-                  ),
+                  (index) => NoteTag(label: 'Note Tag'),
                 ),
               ),
             ),

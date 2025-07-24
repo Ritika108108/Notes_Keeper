@@ -1,8 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:notes_keeper/core/constants.dart';
 
-class NewTagDialog extends StatelessWidget {
+class NewTagDialog extends StatefulWidget {
   const NewTagDialog({super.key});
+
+  @override
+  State<NewTagDialog> createState() => _NewTagDialogState();
+}
+
+class _NewTagDialogState extends State<NewTagDialog> {
+  late final TextEditingController tagController;
+
+  late final GlobalKey<FormFieldState> tagKey;
+
+  @override
+  void initState() {
+    super.initState();
+    tagController = TextEditingController();
+    tagKey = GlobalKey();
+  }
+
+  @override
+  void dispose() {
+    tagController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +38,10 @@ class NewTagDialog extends StatelessWidget {
           textAlign: TextAlign.left,
         ),
         SizedBox(height: 24),
-        TextField(
+        TextFormField(
+          key: tagKey,
+          controller: tagController,
+          autofocus: true,
           decoration: InputDecoration(
             hintText: 'Add tag (<16 characters)',
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -29,7 +54,26 @@ class NewTagDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: primary),
             ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red),
+            ),
           ),
+          validator: (value) {
+            if (value!.trim().isEmpty) {
+              return 'No tags added';
+            } else if (value.trim().length > 16) {
+              return 'Tags should not be more than 16 characters';
+            }
+            return null;
+          },
+          onChanged: (newValue) {
+            tagKey.currentState?.validate();
+          },
         ),
         SizedBox(height: 24),
         DecoratedBox(
@@ -38,8 +82,11 @@ class NewTagDialog extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: ElevatedButton(
-            onPressed: () {},
-            child: Text('Add'),
+            onPressed: () {
+              if (tagKey.currentState?.validate() ?? false) {
+                Navigator.pop(context, tagController.text.trim());
+              }
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: primary,
               foregroundColor: white,
@@ -50,6 +97,7 @@ class NewTagDialog extends StatelessWidget {
               elevation: 0,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
+            child: Text('Add'),
           ),
         ),
       ],
