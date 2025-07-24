@@ -7,6 +7,17 @@ import 'package:notes_keeper/models/note.dart';
 import 'package:provider/provider.dart';
 
 class NewNoteController extends ChangeNotifier {
+  Note? _note;
+  set note(Note? value) {
+    _note = value;
+    _title = _note!.title ?? '';
+    _content = Document.fromJson(jsonDecode(_note!.contentJson));
+    _tags.addAll(_note!.tags ?? []);
+    notifyListeners();
+  }
+
+  Note? get note => _note;
+
   bool readOnly = false;
 
   String _title = '';

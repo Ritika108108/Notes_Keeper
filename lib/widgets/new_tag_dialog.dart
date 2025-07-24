@@ -76,20 +76,13 @@ class _NewTagDialogState extends State<NewTagDialog> {
             tagKey.currentState?.validate();
           },
         ),
-        SizedBox(height: 24),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            boxShadow: [BoxShadow(offset: Offset(2, 2), color: black)],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: NoteButton(
-            label: 'Add',
-            onPreseed: () {
-              if (tagKey.currentState?.validate() ?? false) {
-                Navigator.pop(context, tagController.text.trim());
-              }
-            },
-          ),
+        NoteButton(
+          label: 'Add',
+          onPreseed: () {
+            if (tagKey.currentState?.validate() ?? false) {
+              Navigator.pop(context, tagController.text.trim());
+            }
+          },
         ),
       ],
     );

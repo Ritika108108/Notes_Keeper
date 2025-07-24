@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/core/utils.dart';
+import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/widgets/dialog_card.dart';
 import 'package:notes_keeper/widgets/new_tag_dialog.dart';
 import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_tag.dart';
 import 'package:provider/provider.dart';
 
-class NoteMetaData extends StatefulWidget {
-  const NoteMetaData({required this.isNewNote, super.key});
+class NoteMetadata extends StatefulWidget {
+  const NoteMetadata({required this.note, super.key});
 
-  final bool isNewNote;
+  final Note? note;
 
   @override
-  State<NoteMetaData> createState() => _NoteMetaDataState();
+  State<NoteMetadata> createState() => _NoteMetaDataState();
 }
 
-class _NoteMetaDataState extends State<NoteMetaData> {
+class _NoteMetaDataState extends State<NoteMetadata> {
   late final NewNoteController newNoteController;
 
   @override
@@ -30,7 +32,7 @@ class _NoteMetaDataState extends State<NoteMetaData> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (widget.isNewNote) ...[
+        if (widget.note != null) ...[
           Row(
             children: [
               Expanded(
@@ -43,7 +45,7 @@ class _NoteMetaDataState extends State<NoteMetaData> {
               Expanded(
                 flex: 5,
                 child: Text(
-                  '07 Decemeber 2023, 03:35 PM',
+                  toLongDate(widget.note!.dateModified),
                   style: TextStyle(fontWeight: FontWeight.bold, color: gray900),
                 ),
               ),
@@ -61,7 +63,7 @@ class _NoteMetaDataState extends State<NoteMetaData> {
               Expanded(
                 flex: 5,
                 child: Text(
-                  '06 Decemeber 2023, 03:35 PM',
+                  toLongDate(widget.note!.dateCreated),
                   style: TextStyle(fontWeight: FontWeight.bold, color: gray900),
                 ),
               ),

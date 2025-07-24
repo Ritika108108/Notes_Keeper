@@ -9,7 +9,7 @@ import 'package:notes_keeper/widgets/new_tag_dialog.dart';
 import 'package:notes_keeper/widgets/note_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
-import 'package:notes_keeper/widgets/note_meta_data.dart';
+import 'package:notes_keeper/widgets/note_metadata.dart';
 import 'package:notes_keeper/widgets/note_tag.dart';
 import 'package:provider/provider.dart';
 
@@ -26,29 +26,35 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
   late final FocusNode focusNode;
 
   late final NewNoteController newNoteController;
+  late final TextEditingController titleController;
   late final QuillController quillController;
-
-  late bool readOnly;
+  bool readOnly = false;
 
   @override
   void initState() {
     super.initState();
     focusNode = FocusNode();
-    newNoteController = NewNoteController();
+    newNoteController = context.read<NewNoteController>();
+    titleController = TextEditingController();
     quillController = QuillController.basic()
       ..addListener(() {
         newNoteController.content = quillController.document;
       });
-    if (widget.isNewNote) {
-      focusNode.requestFocus();
-      readOnly = false;
-    } else {
-      readOnly = true;
-    }
+    readOnly = !widget.isNewNote;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.isNewNote) {
+        focusNode.requestFocus();
+        readOnly = false;
+      } else {
+        readOnly = true;
+        quillController.document = newNoteController.content;
+      }
+    });
   }
 
   @override
   void dispose() {
+    titleController.dispose();
     quillController.dispose();
     focusNode.dispose();
     super.dispose();
@@ -119,6 +125,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
           child: Column(
             children: [
               TextField(
+                controller: titleController,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                   hintText: 'Title Here',
@@ -130,7 +137,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                   newNoteController.title = newValue;
                 },
               ),
-              NoteMetaData(isNewNote: widget.isNewNote),
+              NoteMetadata(note: newNoteController.note),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Divider(color: gray700, thickness: 2),
