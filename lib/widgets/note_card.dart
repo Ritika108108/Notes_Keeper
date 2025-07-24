@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/pages/new_or_edit_note_page.dart';
@@ -36,47 +37,55 @@ class NoteCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'This is going to be a title',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: gray900,
-              ),
-            ),
-            SizedBox(height: 4),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  3,
-                  (index) => NoteTag(label: 'Note Tag'),
-                ),
-              ),
-            ),
-            SizedBox(height: 4),
-            if (isInGrid)
-              Expanded(
-                child: Text(
-                  'Some Content',
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: gray700),
-                ),
-              )
-            else
+            if (note.title != null) ...[
               Text(
-                'Some Content',
-                maxLines: 3,
+                note.title!,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: gray700),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: gray900,
+                ),
               ),
+              SizedBox(height: 4),
+            ],
+            if (note.tags != null) ...[
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    note.tags!.length,
+                    (index) => NoteTag(label: note.tags![index]),
+                  ),
+                ),
+              ),
+              SizedBox(height: 4),
+            ],
+            if (note.content != null)
+              isInGrid
+                  ? Expanded(
+                      child: Text(
+                        note.content!,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: gray700),
+                      ),
+                    )
+                  : Text(
+                      note.content!,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: gray700),
+                    ),
+            if (isInGrid) Spacer(),
+
             Row(
               children: [
                 Text(
-                  '02 Nov 2023',
+                  DateFormat('dd MMM, y').format(
+                    DateTime.fromMicrosecondsSinceEpoch(note.dateCreated),
+                  ),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

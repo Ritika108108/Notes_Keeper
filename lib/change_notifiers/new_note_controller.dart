@@ -39,6 +39,14 @@ class NewNoteController extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get canSaveNote {
+    final String? newTitle = title.isNotEmpty ? title : null;
+    final String? newContent = content.toPlainText().trim().isNotEmpty
+        ? content.toPlainText().trim()
+        : null;
+    return newTitle != null || newContent != null;
+  }
+
   void saveNote(BuildContext context) {
     final String? newTitle = title.isNotEmpty ? title : null;
     final String? newContent = content.toPlainText().trim().isNotEmpty
@@ -48,7 +56,7 @@ class NewNoteController extends ChangeNotifier {
     final int now = DateTime.now().microsecondsSinceEpoch;
 
     final Note note = Note(
-      title: title,
+      title: newTitle,
       content: newContent,
       contentJson: contentJson,
       dateCreated: now,

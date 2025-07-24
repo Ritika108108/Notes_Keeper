@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/widgets/note_button.dart';
 
 class NewTagDialog extends StatefulWidget {
   const NewTagDialog({super.key});
@@ -81,23 +82,13 @@ class _NewTagDialogState extends State<NewTagDialog> {
             boxShadow: [BoxShadow(offset: Offset(2, 2), color: black)],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: ElevatedButton(
-            onPressed: () {
+          child: NoteButton(
+            label: 'Add',
+            onPreseed: () {
               if (tagKey.currentState?.validate() ?? false) {
                 Navigator.pop(context, tagController.text.trim());
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primary,
-              foregroundColor: white,
-              side: BorderSide(color: black),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              elevation: 0,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: Text('Add'),
           ),
         ),
       ],
