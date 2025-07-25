@@ -4,8 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/core/dialogs.dart';
-import 'package:notes_keeper/widgets/confirmation_dialog.dart';
-import 'package:notes_keeper/widgets/dialog_card.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
 import 'package:notes_keeper/widgets/note_metadata.dart';
 import 'package:provider/provider.dart';

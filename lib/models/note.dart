@@ -1,7 +1,7 @@
 class Note {
   Note({
     required this.title,
-    required this.content,
+    this.content,
     required this.contentJson,
     required this.dateCreated,
     required this.dateModified,

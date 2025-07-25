@@ -78,6 +78,7 @@ class _NewTagDialogState extends State<NewTagDialog> {
             tagKey.currentState?.validate();
           },
         ),
+        SizedBox(height: 16),
         NoteButton(
           label: 'Add',
           onPreseed: () {

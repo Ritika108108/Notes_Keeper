@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/change_notifiers/notes_provider.dart';
@@ -14,7 +17,7 @@ class NoteCard extends StatelessWidget {
   const NoteCard({required this.note, this.isInGrid, super.key});
 
   final Note note;
-  // ignore: prefer_typing_uninitialized_variables, strict_top_level_inference
+
   final isInGrid;
 
   @override
@@ -73,14 +76,18 @@ class NoteCard extends StatelessWidget {
               isInGrid
                   ? Expanded(
                       child: Text(
-                        note.content!,
+                        Document.fromJson(
+                          jsonDecode(note.content!),
+                        ).toPlainText().trim(),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: gray700),
                       ),
                     )
                   : Text(
-                      note.content!,
+                      Document.fromJson(
+                        jsonDecode(note.content!),
+                      ).toPlainText().trim(),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: gray700),
@@ -101,7 +108,8 @@ class NoteCard extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     final shouldDelete =
-                        await showConfirmationDialog(context: context) ?? false;
+                        await showDeleteConfirmationDialog(context: context) ??
+                        false;
                     if (shouldDelete && context.mounted) {
                       context.read<NotesProvider>().deleteNote(note);
                     }

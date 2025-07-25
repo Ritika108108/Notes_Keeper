@@ -5,8 +5,6 @@ import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/core/dialogs.dart';
 import 'package:notes_keeper/core/utils.dart';
 import 'package:notes_keeper/models/note.dart';
-import 'package:notes_keeper/widgets/dialog_card.dart';
-import 'package:notes_keeper/widgets/new_tag_dialog.dart';
 import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_tag.dart';
 import 'package:provider/provider.dart';

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/change_notifiers/notes_provider.dart';
-import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/pages/new_or_edit_note_page.dart';
 import 'package:notes_keeper/widgets/no_notes.dart';
 import 'package:notes_keeper/widgets/note_fab.dart';
 import 'package:notes_keeper/widgets/note_grid.dart';
-import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
 import 'package:notes_keeper/widgets/note_list.dart';
 import 'package:notes_keeper/widgets/search_field.dart';
@@ -26,15 +24,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Notes Keeper 📒'),
-        actions: [
-          NoteIconButtonOutlined(
-            icon: FontAwesomeIcons.rightFromBracket,
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('Notes Keeper 📒')),
 
       floatingActionButton: NoteFab(
         onPressed: () {
@@ -52,20 +42,30 @@ class _MainPageState extends State<MainPage> {
       body: Consumer<NotesProvider>(
         builder: (context, notesProvider, child) {
           final List<Note> notes = notesProvider.notes;
-          return notes.isEmpty
+          return notes.isEmpty && notesProvider.searchTerm.isEmpty
               ? NoNotes()
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     children: [
                       SearchField(),
-                      ViewOptions(),
+                      if (notes.isNotEmpty) ...[
+                        ViewOptions(),
 
-                      Expanded(
-                        child: notesProvider.isGrid
-                            ? NotesGrid(notes: notes)
-                            : NotesList(notes: notes),
-                      ),
+                        Expanded(
+                          child: notesProvider.isGrid
+                              ? NotesGrid(notes: notes)
+                              : NotesList(notes: notes),
+                        ),
+                      ] else
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'No notes found!',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 );
