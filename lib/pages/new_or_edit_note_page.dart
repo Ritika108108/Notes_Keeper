@@ -5,12 +5,8 @@ import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
 import 'package:notes_keeper/widgets/confirmation_dialog.dart';
 import 'package:notes_keeper/widgets/dialog_card.dart';
-import 'package:notes_keeper/widgets/new_tag_dialog.dart';
-import 'package:notes_keeper/widgets/note_button.dart';
-import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
 import 'package:notes_keeper/widgets/note_metadata.dart';
-import 'package:notes_keeper/widgets/note_tag.dart';
 import 'package:provider/provider.dart';
 
 class NewOrEditNotePage extends StatefulWidget {
@@ -156,12 +152,14 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Divider(color: gray700, thickness: 2),
               ),
-              TextField(
-                focusNode: focusNode,
-                readOnly: readOnly,
-                decoration: InputDecoration(
-                  hintText: 'Note here...',
-                  border: InputBorder.none,
+              Expanded(
+                child: TextField(
+                  focusNode: focusNode,
+                  readOnly: readOnly,
+                  decoration: InputDecoration(
+                    hintText: 'Note here...',
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ],

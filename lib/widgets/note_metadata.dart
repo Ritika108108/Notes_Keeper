@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/core/dialogs.dart';
 import 'package:notes_keeper/core/utils.dart';
 import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/widgets/dialog_card.dart';
@@ -87,9 +88,8 @@ class _NoteMetaDataState extends State<NoteMetadata> {
                   NoteIconButton(
                     icon: FontAwesomeIcons.circlePlus,
                     onPressed: () async {
-                      final String? tag = await showDialog<String?>(
+                      final String? tag = await showNewTagDialog(
                         context: context,
-                        builder: (context) => DialogCard(child: NewTagDialog()),
                       );
 
                       if (tag != null) {
@@ -121,6 +121,15 @@ class _NoteMetaDataState extends State<NoteMetadata> {
                               label: tags[index],
                               onClosed: () {
                                 newNoteController.removeTag(index);
+                              },
+                              onTap: () async {
+                                final String? tag = await showNewTagDialog(
+                                  context: context,
+                                  tag: tags[index],
+                                );
+                                if (tag != null && tag != tags[index]) {
+                                  newNoteController.updateTag(tag, index);
+                                }
                               },
                             ),
                           ),
