@@ -14,6 +14,7 @@ class NewNoteController extends ChangeNotifier {
     _note = value;
     _title = _note!.title ?? '';
     _content = Document.fromJson(jsonDecode(_note!.contentJson));
+    textController.text = _content.toPlainText();
     _tags.addAll(_note!.tags ?? []);
     notifyListeners();
   }
@@ -90,6 +91,8 @@ class NewNoteController extends ChangeNotifier {
 
   void saveNote(BuildContext context) {
     final String? newTitle = title.isNotEmpty ? title : null;
+    _content = Document()..insert(0, textController.text.trim());
+
     final String? newContent = content.toPlainText().trim().isNotEmpty
         ? content.toPlainText().trim()
         : null;

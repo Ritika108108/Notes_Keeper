@@ -13,6 +13,14 @@ import 'package:notes_keeper/pages/new_or_edit_note_page.dart';
 import 'package:notes_keeper/widgets/note_tag.dart';
 import 'package:provider/provider.dart';
 
+String _getNotePreview(String content) {
+  try {
+    return Document.fromJson(jsonDecode(content)).toPlainText().trim();
+  } catch (_) {
+    return content.trim();
+  }
+}
+
 class NoteCard extends StatelessWidget {
   const NoteCard({required this.note, this.isInGrid, super.key});
 
@@ -76,18 +84,14 @@ class NoteCard extends StatelessWidget {
               isInGrid
                   ? Expanded(
                       child: Text(
-                        Document.fromJson(
-                          jsonDecode(note.content!),
-                        ).toPlainText().trim(),
+                        _getNotePreview(note.content!),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: gray700),
                       ),
                     )
                   : Text(
-                      Document.fromJson(
-                        jsonDecode(note.content!),
-                      ).toPlainText().trim(),
+                      _getNotePreview(note.content!),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: gray700),
