@@ -12,6 +12,7 @@ import 'package:notes_keeper/widgets/note_icon_button.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
 import 'package:notes_keeper/widgets/note_list.dart';
 import 'package:notes_keeper/widgets/search_field.dart';
+import 'package:notes_keeper/widgets/view_options.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -22,14 +23,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<String> dropdownOptions = ['Date Modified', 'Date Created'];
-
-  late String dropdownValue = dropdownOptions.first;
-
-  bool isDescending = true;
-
-  bool isGrid = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,77 +59,10 @@ class _MainPageState extends State<MainPage> {
                   child: Column(
                     children: [
                       SearchField(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          children: [
-                            NoteIconButton(
-                              icon: isDescending
-                                  ? FontAwesomeIcons.arrowDown
-                                  : FontAwesomeIcons.arrowUp,
-                              size: 18,
-                              onPressed: () {
-                                setState(() {
-                                  isDescending = !isDescending;
-                                });
-                              },
-                            ),
+                      ViewOptions(),
 
-                            SizedBox(width: 16),
-                            DropdownButton(
-                              value: dropdownValue,
-                              icon: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: FaIcon(
-                                  FontAwesomeIcons.arrowDownWideShort,
-                                  size: 18,
-                                  color: gray700,
-                                ),
-                              ),
-                              underline: SizedBox.shrink(),
-                              borderRadius: BorderRadius.circular(16),
-                              isDense: true,
-                              items: dropdownOptions
-                                  .map(
-                                    (e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Row(
-                                        children: [
-                                          Text(e),
-                                          if (e == dropdownValue) ...[
-                                            SizedBox(width: 8),
-                                            Icon(Icons.check),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              selectedItemBuilder: (context) =>
-                                  dropdownOptions.map((e) => Text(e)).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  dropdownValue = newValue!;
-                                });
-                              },
-                            ),
-                            Spacer(),
-                            NoteIconButton(
-                              icon: isGrid
-                                  ? FontAwesomeIcons.tableCellsLarge
-                                  : FontAwesomeIcons.bars,
-                              size: 18,
-                              onPressed: () {
-                                setState(() {
-                                  isGrid = !isGrid;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
                       Expanded(
-                        child: isGrid
+                        child: notesProvider.isGrid
                             ? NotesGrid(notes: notes)
                             : NotesList(notes: notes),
                       ),

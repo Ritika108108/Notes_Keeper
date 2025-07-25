@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:notes_keeper/enums/order_options.dart';
 import 'package:notes_keeper/models/note.dart';
 
 class NotesProvider extends ChangeNotifier {
   final List<Note> _notes = [];
 
-  List<Note> get notes => [..._notes];
+  List<Note> get notes => [..._notes]..sort(_compare);
+
+  int _compare(Note note1, note2) {
+    return _orderBy == OrderOptions.dateModified
+        ? _isDescending
+              ? note2.dateModified.compareTo(note1.dateModified)
+              : note1.dateModified.compareTo(note2.dateModified)
+        : _isDescending
+        ? note2.dateCreated.compareTo(note1.dateCreated)
+        : note1.dateCreated.compareTo(note2.dateCreated);
+  }
 
   void addNote(Note note) {
     _notes.add(note);
@@ -23,4 +34,31 @@ class NotesProvider extends ChangeNotifier {
     _notes.remove(note);
     notifyListeners();
   }
+
+  OrderOptions _orderBy = OrderOptions.dateModified;
+
+  set orderBy(OrderOptions value) {
+    _orderBy = value;
+    notifyListeners();
+  }
+
+  OrderOptions get orderBy => _orderBy;
+
+  bool _isDescending = true;
+
+  set isDescending(bool value) {
+    _isDescending = value;
+    notifyListeners();
+  }
+
+  bool get isDescending => _isDescending;
+
+  bool _isGrid = true;
+
+  set isGrid(bool value) {
+    _isGrid = value;
+    notifyListeners();
+  }
+
+  bool get isGrid => _isGrid;
 }
