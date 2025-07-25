@@ -84,6 +84,10 @@ class NewNoteController extends ChangeNotifier {
     return canSave;
   }
 
+  void initializeTextController() {
+    textController.text = _content.toPlainText();
+  }
+
   void saveNote(BuildContext context) {
     final String? newTitle = title.isNotEmpty ? title : null;
     final String? newContent = content.toPlainText().trim().isNotEmpty

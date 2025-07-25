@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
+import 'package:notes_keeper/change_notifiers/notes_provider.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/core/dialogs.dart';
 import 'package:notes_keeper/core/utils.dart';
 import 'package:notes_keeper/models/note.dart';
 import 'package:notes_keeper/pages/new_or_edit_note_page.dart';
@@ -96,7 +98,20 @@ class NoteCard extends StatelessWidget {
                   ),
                 ),
                 Spacer(),
-                FaIcon(FontAwesomeIcons.trash, color: gray500, size: 16),
+                GestureDetector(
+                  onTap: () async {
+                    final shouldDelete =
+                        await showConfirmationDialog(context: context) ?? false;
+                    if (shouldDelete && context.mounted) {
+                      context.read<NotesProvider>().deleteNote(note);
+                    }
+                  },
+                  child: FaIcon(
+                    FontAwesomeIcons.trash,
+                    color: gray500,
+                    size: 16,
+                  ),
+                ),
               ],
             ),
           ],

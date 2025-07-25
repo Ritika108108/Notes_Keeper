@@ -3,6 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_keeper/change_notifiers/new_note_controller.dart';
 import 'package:notes_keeper/core/constants.dart';
+import 'package:notes_keeper/core/dialogs.dart';
 import 'package:notes_keeper/widgets/confirmation_dialog.dart';
 import 'package:notes_keeper/widgets/dialog_card.dart';
 import 'package:notes_keeper/widgets/note_icon_button_outlined.dart';
@@ -68,10 +69,7 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
           return;
         }
 
-        final bool? shouldSave = await showDialog<bool?>(
-          context: context,
-          builder: (_) => DialogCard(child: ConfirmationDialog()),
-        );
+        final bool? shouldSave = await showConfirmationDialog(context: context);
         if (shouldSave == null) return;
 
         if (!context.mounted) return;
@@ -153,12 +151,21 @@ class _NewOrEditNotePageState extends State<NewOrEditNotePage> {
                 child: Divider(color: gray700, thickness: 2),
               ),
               Expanded(
-                child: TextField(
-                  focusNode: focusNode,
-                  readOnly: readOnly,
-                  decoration: InputDecoration(
-                    hintText: 'Note here...',
-                    border: InputBorder.none,
+                child: Selector<NewNoteController, bool>(
+                  selector: (_, controller) => controller.readOnly,
+                  builder: (_, readOnly, __) => TextField(
+                    controller: newNoteController.textController,
+                    focusNode: focusNode,
+                    readOnly: readOnly,
+                    autofocus: !readOnly,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    expands: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Note here...',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
                   ),
                 ),
               ),
